@@ -83,26 +83,4 @@ class ProductManager{
     }
 }
 
-const test = new ProductManager();
-
-function myFunction() {
-    const objPrducto = {
-        title: 'producto prueba',
-        code: 123456,
-        description: 'Este es un producto prueba',
-        price: 200,
-        thumbnail: 'sin imagen',
-        stock: 25
-    }
-    
-    console.log(test.getProducts());
-
-    test.addProduct(objPrducto);
-    objPrducto.code++;
-    test.addProduct(objPrducto);
-    console.log(test.getProducts());
-    test.addProduct(objPrducto);
-    console.log(test.getProductById(1));
-}
-
-myFunction()
+export default ProductManager;
