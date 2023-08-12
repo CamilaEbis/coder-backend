@@ -10,18 +10,18 @@ class ProductManager{
 
     addProduct(product) {
         if (this.validateCode(product.code)) {
-            console.log("Este code ya existe!");
+            return console.log("Este code ya existe!");
         } else {
             const producto = {id:this.generateId(), title:product.title, description:product.description, price:product.price, thumbnail:product.thumbnail, code:product.code, stock:product.stock};
             this.products.push(producto);
             this.saveProducts();
-            console.log("Producto agregado!");
+            return console.log("Producto agregado!");
         }
     }
 
     updateProduct(id, product) {
         this.products = this.getProducts();
-        let indice = this.products.findIndex(item => item.id === id);
+        const indice = this.products.findIndex(item => item.id === id);
 
         if (indice > -1) {
             this.products[indice].title = product.title;
@@ -31,9 +31,9 @@ class ProductManager{
             this.products[indice].code = product.code;
             this.products[indice].stock = product.stock;
             this.saveProducts();
-            console.log("Product updated!");
+            return console.log("Product updated!");
         } else {
-            console.log("Producto no encontrado!");
+            return console.log("Producto no encontrado!");
         }
     }
 
@@ -44,15 +44,17 @@ class ProductManager{
         if (indice > -1) {
             this.products.splice(indice, 1); (0,1)
             this.saveProducts();
-            console.log("Product #" + id + " deleted!");
+            return console.log("Product #" + id + " deleted!");
         } else {
-            console.log("Not found!");
+            return console.log("Not found!");
         }
     }
 
-    async getProducts() {
+    async getProducts(limit = undefined) {
         let products = JSON.parse(await fs.readFile(this.path, "utf-8"));
-
+        if(limit) {
+            return products.slice(0, limit)
+        }
         return products;
     }
 
