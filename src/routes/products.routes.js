@@ -1,12 +1,12 @@
-import { Router } from 'express';
-import ProductManager from '../controllers/productManager.js';
+import { Router } from 'express'
+import ProductManager from '../controllers/productManager.js'
 
 const productManager = new ProductManager('src/models/Products.txt');
 const routerProd = Router()
 
 routerProd.get('/', async(req,res) => {
     const {limit} = req.query
-    const prods = await productManager.getProducts(limit)
+    const products = await productManager.getProducts(limit)
     res.status(200).send(products)
 })
 

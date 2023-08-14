@@ -1,9 +1,9 @@
 import {promises as fs} from 'fs';
 
 class ProductManager{
-    constructor() {
+    constructor(path) {
         this.products = [];
-        this.path = "Products.txt";
+        this.path = path;
     
     }
 
