@@ -1,1 +1,1 @@
-[{"id":1,"title":"producto prueba","description":"Este es un producto prueba","price":200,"thumbnail":"sin imagen","code":123456,"stock":25},{"id":2,"title":"producto prueba","description":"Este es un producto prueba","price":200,"thumbnail":"sin imagen","code":123457,"stock":25}]
+[{"id":1,"title":"pepe","description":"pito","price":"1234665","code":"23343","stock":"23"}]
