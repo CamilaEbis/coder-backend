@@ -1,0 +1,9 @@
+<h1>Productos </h1>
+
+{{#each products}}
+    <div>
+        <p>{{this.producto}} {{this.code}} {{this.precio}}</p>
+    </div>
+{{/each}}
+
+{{>count/count}}
