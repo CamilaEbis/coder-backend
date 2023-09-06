@@ -40,11 +40,17 @@ app.set('view engine', 'handlebars')
 app.set('views', path.resolve(__dirname, './views'))
 
 const upload = multer({ storage: storage})
+const mensajes = []
 
 //conexion de Socket.io
 io.on("connection", (socket) => {
     console.log("conexion con Socket.io")
-
+    socket.on('mensaje', info => {
+        console.log(info)
+        mensajes.push(info)
+        io.emit('mensajes', mensajes)
+    })
+/*
     socket.on('mensaje', info => {
         console.log(info)
         socket.emit('respuesta', true)
@@ -64,6 +70,7 @@ io.on("connection", (socket) => {
     })
 
     socket.emit("MensajeProductoCreado", "El producto se creo correctamete")
+    */
 })
 
 //routes
@@ -72,13 +79,17 @@ app.use('/api/product', routerProd)
 
 app.get('/static', (req, res) => {
 
-    res.render("home", {
+    /*res.render("home", {
         titulo: "products",
         nombreUsuario : "Camila",
         rutaJS: "home"
 
-    })
+    })*/
 
+    res.render("chat", {
+        rutaJS: "chat",
+        rutaCSS: "style"
+    })
 })
 
 app.get('/realtimeproducts', (req, res) => {
