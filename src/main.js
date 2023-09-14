@@ -9,10 +9,35 @@ import path from 'path';
 import cartsRouter from './routes/cart.routes.js';
 import ProductManager from './controllers/productManager.js';
 
+import userRouter from './routes/user.routes.js';
+import mongoose from 'mongoose';
+
+import cartModel from './models/carts.models.js'
+import { userModel } from './models/users.models.js'
+
 const app = express();
 const puerto = 8085;
 
 const productManager = new ProductManager('./src/models/Products.txt');
+
+//middlewares
+app.use(express.json())
+app.use(express.urlencoded({ extended: true}))
+app.engine('handlebars', engine())
+app.set('view engine', 'handlebars')
+app.set('views', path.resolve(__dirname, './views'))
+
+//mongoose
+mongoose.connect('mongodb+srv://camiebiscoder:coder@clustercoder.q9wfrsz.mongodb.net/?retryWrites=true&w=majority')
+    .then(async () => {
+        console.log("DB conectada")
+        await cartModel.create([])
+    })
+    .catch((error) => console.log("Error en conexion a MongoDB Atlas: ", error))
+
+app.use('/api/users', userRouter)
+
+
 
 //server
 const server = app.listen(puerto, () => {
@@ -31,14 +56,6 @@ const storage = multer.diskStorage({
 })
 
 
-
-//middlewares
-app.use(express.json())
-app.use(express.urlencoded({ extended: true}))
-app.engine('handlebars', engine())
-app.set('view engine', 'handlebars')
-app.set('views', path.resolve(__dirname, './views'))
-
 const upload = multer({ storage: storage})
 const mensajes = []
 
@@ -50,27 +67,6 @@ io.on("connection", (socket) => {
         mensajes.push(info)
         io.emit('mensajes', mensajes)
     })
-/*
-    socket.on('mensaje', info => {
-        console.log(info)
-        socket.emit('respuesta', true)
-    })
-
-    socket.on('nuevoProducto', async (prod) => {
-        console.log(prod)
-        
-        await productManager.addProduct(prod);
-        const products = await productManager.getProducts();
-        socket.emit('products', products);
-    })
-
-    socket.on('load', async () => {
-        const products = await productManager.getProducts();
-        socket.emit('products', products);
-    })
-
-    socket.emit("MensajeProductoCreado", "El producto se creo correctamete")
-    */
 })
 
 //routes
