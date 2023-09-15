@@ -2,23 +2,20 @@ import express from 'express'
 import multer from 'multer';
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
-import routerProd from './routes/products.routes.js'
 
 import { __dirname } from './path.js';
 import path from 'path';
-import cartsRouter from './routes/cart.routes.js';
-import ProductManager from './controllers/productManager.js';
+import cartRouter from './routes/cart.routes.js';
+import productRouter from './routes/products.routes.js';
 
 import userRouter from './routes/user.routes.js';
 import mongoose from 'mongoose';
 
 import cartModel from './models/carts.models.js'
-import { userModel } from './models/users.models.js'
+//import { userModel } from './models/users.models.js'
 
 const app = express();
 const puerto = 8085;
-
-const productManager = new ProductManager('./src/models/Products.txt');
 
 //middlewares
 app.use(express.json())
@@ -34,10 +31,6 @@ mongoose.connect('mongodb+srv://camiebiscoder:coder@clustercoder.q9wfrsz.mongodb
         await cartModel.create([])
     })
     .catch((error) => console.log("Error en conexion a MongoDB Atlas: ", error))
-
-app.use('/api/users', userRouter)
-
-
 
 //server
 const server = app.listen(puerto, () => {
@@ -55,7 +48,6 @@ const storage = multer.diskStorage({
     }
 })
 
-
 const upload = multer({ storage: storage})
 const mensajes = []
 
@@ -71,7 +63,10 @@ io.on("connection", (socket) => {
 
 //routes
 app.use('/static', express.static(__dirname + '/public'))
-app.use('/api/product', routerProd)
+
+app.use('/api/users', userRouter)
+app.use('/api/cart', cartRouter)
+app.use('/api/product', productRouter)
 
 app.get('/static', (req, res) => {
 
@@ -97,8 +92,6 @@ app.get('/realtimeproducts', (req, res) => {
 
 })
 
-
-app.use('/api/cart', cartsRouter)
 app.post('/upload', upload.single('product'), (req, res) => {
     console.log(req.file)
     console.log(req.body)
