@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import multer from 'multer';
 import { engine } from 'express-handlebars'
@@ -25,7 +26,7 @@ app.set('view engine', 'handlebars')
 app.set('views', path.resolve(__dirname, './views'))
 
 //mongoose
-mongoose.connect('mongodb+srv://camiebiscoder:coder@clustercoder.q9wfrsz.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URL)
     .then(async () => {
         console.log("DB conectada")
         await cartModel.create([])
