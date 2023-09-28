@@ -17,6 +17,9 @@ import cartModel from './models/carts.models.js';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 
+import passport from 'passport';
+import initializePassport from './config/passport.js';
+
 const app = express();
 const puerto = 8085;
 
@@ -33,6 +36,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(express.urlencoded({ extended: true}))
 app.engine('handlebars', engine())
